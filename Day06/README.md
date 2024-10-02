@@ -2,48 +2,61 @@
 ![Security VS NACL](https://github.com/saikiranpi/mastering-aws/assets/109568252/2fe56c98-cc17-4589-821d-9b54e16ac47c)
 
 
-# Security Groups vs Network Access Control Lists (NACLs)
+Here’s a comprehensive comparison of Security Groups (SG) and Network Access Control Lists (NACLs) in AWS, integrating the analogy of firewalls and practical examples to illustrate their functionalities:
 
-Let's delve into the differences between security groups (SG) and network access control lists (NACLs) in AWS, using the analogy of firewalls and practical examples to illustrate their functionalities.
+# Security Groups vs. Network Access Control Lists (NACLs)
 
-## Security Groups
+## Overview
 
-Security groups act as stateful firewalls, controlling traffic at the instance level based on rules. They regulate inbound and outbound traffic and are associated with individual instances.
+## Security Groups (SG):
 
-### Practical Example
+	•	Definition: Security groups act as stateful firewalls controlling traffic at the instance level based on rules.
+	•	Functionality: They regulate both inbound and outbound traffic and are associated with individual instances.
+	•	Default Behavior: All inbound traffic is denied by default, while all outbound traffic is allowed.
+	•	Evaluation: They require explicit rules to allow traffic, and once a connection is allowed, responses are automatically permitted.
 
-Suppose you have an instance with default security group settings:
-- All inbound traffic is denied by default.
-- Outbound traffic is allowed by default.
+## Network Access Control Lists (NACLs):
 
-1. **Allow All Inbound Traffic:** Delete the outbound rules and test internet connectivity. You'll notice that the instance can connect to the internet.
-2. **Restrict Outbound Access to Websites:** Add outbound rules for HTTP and HTTPS. Test again to ensure only website access is permitted.
-3. **Allow ICMP Protocol for Ping:** As ping uses ICMP protocol, add an outbound rule to allow ICMP traffic for ping to work.
+	•	Definition: NACLs function as stateless firewalls controlling traffic at the subnet level based on rules.
+	•	Functionality: They evaluate inbound and outbound traffic separately and are associated with subnets.
+	•	Default Behavior: All inbound and outbound traffic is allowed by default when a custom NACL is created (initially denies all).
+	•	Evaluation: Rules are evaluated in numerical order; both allow and deny options are available.
 
-Remember, security groups start with a default deny stance and require explicit rules to allow traffic.
+## Practical Examples
 
-## Network Access Control Lists (NACLs)
+Security Groups Example:
+Suppose you have an EC2 instance with default security group settings:
 
-NACLs, on the other hand, function as stateless firewalls, controlling traffic at the subnet level based on rules. They evaluate inbound and outbound traffic separately and are associated with subnets.
+	1.	All inbound traffic is denied by default.
+	2.	Outbound traffic is allowed by default.
 
-### Real-Time Scenario
+## Testing Scenarios:
 
-Let's consider a scenario where you have a web server that needs to be accessible from the internet. Here's the setup:
-- Outbound Rules: Allow all traffic.
-- Inbound Rules: Allow TCP port 80 from 0.0.0.0/0 (anywhere) for web traffic and TCP port 22 from your IP address for SSH access.
+	•	Allow All Inbound Traffic: Remove all outbound rules. Test internet connectivity; the instance can connect to the internet due to outbound allowance.
+	•	Restrict Outbound Access to Websites: Add outbound rules for HTTP (port 80) and HTTPS (port 443). Test again to ensure access is limited to only specified websites.
+	•	Allow ICMP Protocol for Ping: To enable ping functionality, add an outbound rule allowing ICMP traffic.
 
-By configuring NACLs in this manner, you ensure that web traffic (HTTP) is allowed from anywhere while SSH access is restricted to your IP address only.
+## Key Takeaway: Security groups start with a default deny stance and require explicit rules to allow traffic.
 
-## Comparison: SG vs NACL
+## Network Access Control Lists (NACLs) Example:
+Consider a scenario where you need a web server accessible from the internet:
 
-- **Security Groups:** Work at the instance level. They are stateful and require explicit rules for inbound and outbound traffic.
-- **NACLs:** Operate at the subnet level. They are stateless and evaluate inbound and outbound traffic separately, with the option to allow or deny traffic based on defined rules.
+	1.	Outbound Rules: Allow all traffic.
+	2.	Inbound Rules:
+	•	Allow TCP port 80 from 0.0.0.0/0 (anywhere) for web traffic.
+	•	Allow TCP port 22 from your IP address for SSH access.
 
-Remember, in an interview scenario, you may be asked to differentiate between security groups and NACLs. Security groups regulate traffic at the instance level, while NACLs control traffic at the subnet level, offering both allow and deny options based on defined rules.
+Testing Scenario:
+By configuring NACLs this way, web traffic (HTTP) is permitted from anywhere, while SSH access is restricted to your specific IP address.
 
-![SG vs NACL](sg_vs_nacl.png)
 
-This diagram visually represents the differences between security groups and NACLs in AWS, highlighting their respective scopes and functionalities.
+
+Conclusion
+
+	•	Security Groups: Best for controlling instance-level traffic. They provide simpler management and automatic statefulness, making them suitable for managing access to individual resources.
+	•	Network Access Control Lists (NACLs): Ideal for subnet-level traffic control, providing an additional layer of security across multiple instances. They require more careful management of inbound and outbound rules due to their stateless nature.
+
+By understanding these distinctions, you can effectively manage AWS network security in your applications and prepare for potential interview scenarios regarding AWS networking concepts.
 
 
 ![Sg vs NACL](https://github.com/saikiranpi/mastering-aws/assets/109568252/8a623a87-f5f0-4d5d-a84c-268f28bd690a)
